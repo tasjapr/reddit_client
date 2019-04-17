@@ -3,10 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="entry"
+            type="com.example.redditclient.ui.Entry" />
+    </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_margin="5dp">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -14,11 +25,12 @@
 
             <TextView
                 android:id="@+id/number_of_entry"
-                android:layout_width="15dp"
+                android:layout_width="25dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:text="#"
+                android:layout_margin="5dp"
+                android:text="@{'#' + String.valueOf(entry.entryNumber)}"
                 android:textAlignment="center"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -31,21 +43,21 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
                 android:contentDescription="avatar"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.07"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.05"
-                tools:srcCompat="@tools:sample/avatars" />
+                android:src="#FC1EB2"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="@id/number_of_entry"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/entry_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Title"
+                android:text="@{entry.entryTitle}"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/avatar"
@@ -55,14 +67,16 @@
 
             <TextView
                 android:id="@+id/entry_info"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="info"
+                android:layout_marginStart="35dp"
+                android:layout_marginEnd="80dp"
+                android:text="@{entry.entryInfo}"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.07"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/number_of_entry"
+                app:layout_constraintRight_toLeftOf="@id/button_go"
+                app:layout_constraintStart_toStartOf="@+id/avatar"
                 app:layout_constraintTop_toBottomOf="@+id/avatar"
                 app:layout_constraintVertical_bias="0.2" />
 
@@ -71,10 +85,13 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_gravity="center"
+                android:layout_marginStart="30dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="5dp"
                 android:src="@drawable/ic_rating"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.07"
-                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="@id/number_of_entry"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/entry_info"
                 app:layout_constraintVertical_bias="0.7" />
@@ -83,14 +100,16 @@
                 android:id="@+id/rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="rating"
-                android:textSize="14sp"
+                android:layout_marginLeft="2dp"
+                android:gravity="bottom"
+                android:text="@{String.valueOf(entry.entryRating)}"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@id/ic_rating"
                 app:layout_constraintHorizontal_bias="0.01"
                 app:layout_constraintLeft_toRightOf="@id/ic_rating"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/ic_rating"
-                app:layout_constraintVertical_bias="1" />
+                app:layout_constraintVertical_bias="0.5" />
 
             <ImageView
                 android:id="@+id/ic_comments"
@@ -109,20 +128,22 @@
                 android:id="@+id/num_of_comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="comments"
+                android:layout_marginLeft="2dp"
+                android:text="@{String.valueOf(entry.numberOfComments)}"
+                android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@+id/ic_comments"
                 app:layout_constraintHorizontal_bias="0.01"
                 app:layout_constraintLeft_toRightOf="@id/ic_comments"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@id/ic_comments"
-                app:layout_constraintVertical_bias="1" />
+                app:layout_constraintVertical_bias="0.5" />
 
             <Button
                 android:id="@+id/button_go"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:text="Go!"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/number_of_entry"
                 app:layout_constraintHorizontal_bias="0.95"
                 app:layout_constraintLeft_toLeftOf="parent"
