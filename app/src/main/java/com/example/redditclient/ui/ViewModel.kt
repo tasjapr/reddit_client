@@ -1,25 +1,53 @@
 package com.example.redditclient.ui
 
+import android.app.Application
 import androidx.databinding.ObservableField
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.redditclient.data.OnEntryReadyCallback
 import com.example.redditclient.data.RedditEntryRepositories
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.observers.DisposableObserver
+import io.reactivex.schedulers.Schedulers
 
-class ViewModel : ViewModel() {
-    var redditEntryRepo: RedditEntryRepositories =
-        RedditEntryRepositories()
+class ViewModel(application: Application) : AndroidViewModel(application) {
 
-    val isLoading = ObservableField(false)
+    var redditEntryRepo: RedditEntryRepositories = RedditEntryRepositories()
+
     var entries = MutableLiveData<ArrayList<Entry>>()
 
-    fun loadRepositories() {
+    val isLoading = ObservableField(false)
+    private val compositeDisposable = CompositeDisposable()
+
+    fun loadEntries() {
         isLoading.set(true)
-        redditEntryRepo.getEntries(object : OnEntryReadyCallback {
-            override fun onDataReady(data: ArrayList<Entry>) {
-                isLoading.set(false)
-                entries.value = data
-            }
-        })
+
+        compositeDisposable.add(
+            redditEntryRepo
+                .getEntries()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : DisposableObserver<ArrayList<Entry>>() {
+
+                    override fun onError(e: Throwable) {
+                        //todo
+                    }
+
+                    override fun onNext(data: ArrayList<Entry>) {
+                        entries.value = data
+                    }
+
+                    override fun onComplete() {
+                        isLoading.set(false)
+                    }
+                })
+        )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        if (!compositeDisposable.isDisposed) {
+            compositeDisposable.dispose()
+        }
     }
 }
