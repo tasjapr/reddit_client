@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">RedditClient</string>
+    <string name="description_avatar">avatar</string>
+    <string name="description_ic_rating">ic_rating</string>
+    <string name="description_ic_comments">ic_comments</string>
+    <string name="btn_go">Go!</string>
+    <string name="btn_refresh">Refresh</string>
 </resources>

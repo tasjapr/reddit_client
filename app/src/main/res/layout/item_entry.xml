@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -15,9 +14,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp">
+        android:layout_marginEnd="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -28,7 +27,7 @@
                 android:layout_width="25dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="@{'#' + String.valueOf(entry.entryNumber)}"
+                android:text="@{'#' + String.valueOf(safeUnbox(entry.entryNumber))}"
                 android:textAlignment="center"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -43,9 +42,9 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="30dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
-                android:contentDescription="avatar"
+                android:contentDescription="@string/description_avatar"
                 android:src="#FC1EB2"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="@id/number_of_entry"
@@ -86,8 +85,9 @@
                 android:layout_height="15dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="30dp"
-                android:layout_marginBottom="10dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:contentDescription="@string/description_ic_rating"
                 android:src="@drawable/ic_rating"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -100,9 +100,9 @@
                 android:id="@+id/rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
+                android:layout_marginStart="2dp"
                 android:gravity="bottom"
-                android:text="@{String.valueOf(entry.entryRating)}"
+                android:text="@{String.valueOf(safeUnbox(entry.entryRating))}"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@id/ic_rating"
                 app:layout_constraintHorizontal_bias="0.01"
@@ -116,6 +116,7 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_gravity="bottom"
+                android:contentDescription="@string/description_ic_comments"
                 android:src="@drawable/ic_comments"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.04"
@@ -128,8 +129,8 @@
                 android:id="@+id/num_of_comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
-                android:text="@{String.valueOf(entry.numberOfComments)}"
+                android:layout_marginStart="2dp"
+                android:text="@{String.valueOf(safeUnbox(entry.numberOfComments))}"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@+id/ic_comments"
                 app:layout_constraintHorizontal_bias="0.01"
@@ -142,7 +143,7 @@
                 android:id="@+id/button_go"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:text="Go!"
+                android:text="@string/btn_go"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/number_of_entry"
                 app:layout_constraintHorizontal_bias="0.95"
