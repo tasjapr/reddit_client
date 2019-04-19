@@ -1,22 +1,24 @@
 package com.example.redditclient.data
 
 import com.example.redditclient.ui.Entry
+import io.reactivex.Observable
+import java.util.concurrent.TimeUnit
 
 class RedditEntryRepositories {
 
-    val localDataSource = RedditEntryLocalDataSourse()
-    val remoteDataSource = RedditEntryRemoteDataSourse()
+    val localDataSource = RedditEntryLocalDataSource()
+    private val remoteDataSource = RedditEntryRemoteDataSource()
 
-    fun getEntries(onEntryReadyCallback: OnEntryReadyCallback) {
-        remoteDataSource.getEntries(object : OnEntryRemoteReadyCallback {
-            override fun onRemoteDataReady(data: ArrayList<Entry>) {
-                localDataSource.saveEntries(data)
-                onEntryReadyCallback.onDataReady(data)
-            }
-        })
+
+    fun getEntries(): Observable<ArrayList<Entry>> {
+        return remoteDataSource.getEntries().delay(500, TimeUnit.MILLISECONDS)
     }
-}
 
-interface OnEntryReadyCallback {
-    fun onDataReady(data: ArrayList<Entry>)
+    fun getEntriesFromFavorites() {
+        //TODO
+    }
+
+    fun saveEntryToFavorite() {
+        //TODO
+    }
 }
