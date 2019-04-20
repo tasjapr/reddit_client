@@ -7,7 +7,6 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.redditclient.NetworkManager
 import com.example.redditclient.R
 import com.example.redditclient.databinding.ActivityMainBinding
 
