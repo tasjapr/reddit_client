@@ -10,6 +10,5 @@ class Entry(
 ) : BaseObservable() {
 
     private var timeAgo = PrettyTime(Locale.ENGLISH).format(Date(utcTime * 1000))
-
     var info: String = "post by $author in $subreddit $timeAgo"
 }
