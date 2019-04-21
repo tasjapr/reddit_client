@@ -1,22 +1,15 @@
 package com.example.redditclient.ui
 
 import androidx.databinding.BaseObservable
-import androidx.databinding.Bindable
-import com.example.redditclient.BR
+import org.ocpsoft.prettytime.PrettyTime
+import java.util.*
 
 class Entry(
-    var entryNumber: Int, entryTitle: String, var entryAuthor: String, var entrySubreddit: String?,
-    var numberOfComments: Int?, var entryRating: Int?
+    var number: Int, var title: String, var author: String, var subreddit: String?,
+    var comments: Int?, var rating: Int?, var utcTime: Long
 ) : BaseObservable() {
 
-    @get:Bindable
-    var entryTitle: String = "Title"
-        set(value) {
-            field = value
-            notifyPropertyChanged(BR.entryTitle)
-        }
+    private var timeAgo = PrettyTime(Locale.ENGLISH).format(Date(utcTime * 1000))
 
-    var entryInfo: String = "post by $entryAuthor in $entrySubreddit"
-
-
+    var info: String = "post by $author in $subreddit $timeAgo }"
 }
