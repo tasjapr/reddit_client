@@ -47,7 +47,8 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         )
     }
 
-    fun openEntryInChromeTab(index : Int, context:Context){
+
+    fun openEntryInChromeTab(index: Int, context: Context) {
         val builder = CustomTabsIntent.Builder()
         val customTabsIntent = builder.build()
 
@@ -55,6 +56,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun getSingleEntry(data: List<TopResponseModel.Children>): ArrayList<Entry> {
+
         val entries = ArrayList<Entry>(data.size)
         for (i in 0..49) {
             entries.add(
@@ -65,6 +67,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                     rating = data[i].data.score,
                     subreddit = data[i].data.subreddit,
                     comments = data[i].data.num_comments,
+
                     utcTime = data[i].data.created_utc,
                     url = data[i].data.url,
                     thumbnail = data[i].data.thumbnail

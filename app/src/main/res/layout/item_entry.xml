@@ -41,7 +41,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
                 tools:text="#1" />
-
             <ImageView
                 android:id="@+id/avatar"
                 android:layout_width="70dp"
@@ -71,7 +70,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0"
                 tools:text="Posted by u/Chainsaw_Hamster 14 hours ago Posted by u/Chainsaw_Hamster 14 hours ago" />
-
             <TextView
                 android:id="@+id/entry_title"
                 android:layout_width="match_parent"
@@ -89,7 +87,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/entry_info"
                 app:layout_constraintVertical_bias="0.0"
                 tools:text="Ohio prison guards laughed as white hio prison guards laughed as white hio prison guards laughed as white suprema ci  ssscst a stabbed cuffed black inmates" />
-
             <ImageView
                 android:id="@+id/ic_rating"
                 android:layout_width="15dp"
