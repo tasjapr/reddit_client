@@ -3,14 +3,13 @@ package com.example.redditclient.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.redditclient.databinding.ItemEntryBinding
 
 class RVAdapter(
     private var items: ArrayList<Entry>,
     private var listener: OnItemClickListener
 ) : RecyclerView.Adapter<RVAdapter.ViewHolder>() {
-
-    lateinit var binding : ItemEntryBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -36,6 +35,7 @@ class RVAdapter(
 
         fun bind(entry: Entry, listener: OnItemClickListener?) {
             binding.entry = entry
+            Glide.with(binding.root).load(entry.thumbnail).into(binding.avatar)
             if (listener != null) {
                 binding.root.setOnClickListener { listener.onItemClick(layoutPosition) }
             }

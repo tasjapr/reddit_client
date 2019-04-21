@@ -7,20 +7,23 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.redditclient.R
 import com.example.redditclient.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.item_entry.view.*
 
 class MainActivity : AppCompatActivity(), RVAdapter.OnItemClickListener, LifecycleOwner {
 
     lateinit var binding: ActivityMainBinding
 
     private val rvAdapter = RVAdapter(arrayListOf(), this)
+    private lateinit var viewModel: ViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
-        val viewModel = ViewModelProviders.of(this).get(ViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(ViewModel::class.java)
         binding.viewModel = viewModel
         binding.executePendingBindings()
 
@@ -28,11 +31,10 @@ class MainActivity : AppCompatActivity(), RVAdapter.OnItemClickListener, Lifecyc
         binding.entriesRv.adapter = rvAdapter
 
         viewModel.entries.observe(this,
-            Observer<ArrayList<Entry>> { it?.let { rvAdapter.replaceData(it) } })
-
+            Observer<ArrayList<Entry>> { it?.let(rvAdapter::replaceData) })
     }
 
     override fun onItemClick(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        viewModel.openEntryInChromeTab(position, this)
     }
 }

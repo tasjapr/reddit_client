@@ -1,7 +1,9 @@
 package com.example.redditclient.ui
 
 import android.app.Application
-import android.util.Log
+import android.content.Context
+import android.net.Uri
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -30,13 +32,12 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                 .subscribeWith(object : DisposableObserver<TopResponseModel.Result>() {
                     override fun onError(e: Throwable) {
                         //todo
-                        Log.d("Bazinga", "error: $e")
+//                        Log.d("Bazinga", "error: $e")
                         isLoading.set(false)
                     }
 
                     override fun onNext(t: TopResponseModel.Result) {
-                        entries.value = showResult(t.data.children)
-
+                        entries.value = getSingleEntry(t.data.children)
                     }
 
                     override fun onComplete() {
@@ -46,7 +47,14 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         )
     }
 
-    private fun showResult(data: List<TopResponseModel.Children>): ArrayList<Entry> {
+    fun openEntryInChromeTab(index : Int, context:Context){
+        val builder = CustomTabsIntent.Builder()
+        val customTabsIntent = builder.build()
+
+        customTabsIntent.launchUrl(context, Uri.parse(entries.value?.get(index)?.url))
+    }
+
+    private fun getSingleEntry(data: List<TopResponseModel.Children>): ArrayList<Entry> {
         val entries = ArrayList<Entry>(data.size)
         for (i in 0..49) {
             entries.add(
@@ -57,13 +65,14 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                     rating = data[i].data.score,
                     subreddit = data[i].data.subreddit,
                     comments = data[i].data.num_comments,
-                    utcTime = data[i].data.created_utc
+                    utcTime = data[i].data.created_utc,
+                    url = data[i].data.url,
+                    thumbnail = data[i].data.thumbnail
                 )
             )
         }
 
         isLoading.set(false)
-        Log.d("Bazinga", "data: ${data[0].data.author} result: ${entries[0].comments}")
         return entries
     }
 
