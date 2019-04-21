@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -27,7 +28,7 @@
                 android:layout_width="25dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:text="@{'#' + String.valueOf(safeUnbox(entry.entryNumber))}"
+                android:text="@{'#' + String.valueOf(safeUnbox(entry.number))}"
                 android:textAlignment="center"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -53,15 +54,16 @@
 
             <TextView
                 android:id="@+id/entry_title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@{entry.entryTitle}"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:layout_marginStart="70dp"
+                android:layout_marginEnd="80dp"
+                android:text="@{entry.info}"
+                android:textSize="12sp"
+                tools:text="Posted byu/Chainsaw_Hamster 14 hours ago"
                 app:layout_constraintBottom_toBottomOf="@id/avatar"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/avatar"
+                app:layout_constraintStart_toStartOf="@+id/avatar"
                 app:layout_constraintTop_toTopOf="@+id/avatar" />
 
             <TextView
@@ -70,14 +72,17 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="35dp"
                 android:layout_marginEnd="80dp"
-                android:text="@{entry.entryInfo}"
+                android:text="@{entry.title}"
+                tools:text="Ohio prison guards laughed as white supremacist stabbed cuffed black inmates"
                 android:textSize="14sp"
+                android:textColor="#F2242424"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="@id/number_of_entry"
                 app:layout_constraintRight_toLeftOf="@id/button_go"
                 app:layout_constraintStart_toStartOf="@+id/avatar"
-                app:layout_constraintTop_toBottomOf="@+id/avatar"
-                app:layout_constraintVertical_bias="0.2" />
+                app:layout_constraintTop_toBottomOf="@+id/entry_title"
+                app:layout_constraintVertical_bias="0.05" />
 
             <ImageView
                 android:id="@+id/ic_rating"
@@ -102,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
                 android:gravity="bottom"
-                android:text="@{String.valueOf(safeUnbox(entry.entryRating))}"
+                android:text="@{String.valueOf(safeUnbox(entry.rating))}"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@id/ic_rating"
                 app:layout_constraintHorizontal_bias="0.01"
@@ -130,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:text="@{String.valueOf(safeUnbox(entry.numberOfComments))}"
+                android:text="@{String.valueOf(safeUnbox(entry.comments))}"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toBottomOf="@+id/ic_comments"
                 app:layout_constraintHorizontal_bias="0.01"
