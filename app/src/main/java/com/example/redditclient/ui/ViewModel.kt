@@ -47,7 +47,7 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         )
     }
 
-    fun openEntryInChromeTab(index : Int, context:Context){
+    fun openEntryInChromeTab(index: Int, context: Context) {
         val builder = CustomTabsIntent.Builder()
         val customTabsIntent = builder.build()
 
