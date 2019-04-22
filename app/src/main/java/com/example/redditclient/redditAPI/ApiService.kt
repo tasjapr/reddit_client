@@ -10,13 +10,13 @@ import retrofit2.http.Query
 interface ApiService {
 
     @GET("top.json?limit=50")
-    fun getTopEntries(): Observable<TopResponseModel.Result>
+    fun getTopEntries(): Observable<TopEntriesResponse.Result>
 
     @GET("top.json?limit=50&")
-    fun nextPage(@Query("after") name: String): Observable<TopResponseModel.Result>
+    fun nextPage(@Query("after") name: String): Observable<TopEntriesResponse.Result>
 
     @GET("top.json?limit=50&")
-    fun prevPage(@Query("before") name: String): Observable<TopResponseModel.Result>
+    fun prevPage(@Query("before") name: String): Observable<TopEntriesResponse.Result>
 
     companion object {
         fun create(): ApiService {

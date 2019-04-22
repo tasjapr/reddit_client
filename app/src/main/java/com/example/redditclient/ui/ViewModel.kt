@@ -4,14 +4,12 @@ import android.app.Application
 import android.content.Context
 import android.graphics.Color
 import android.net.Uri
-import android.util.Log
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.redditclient.R
 import com.example.redditclient.data.EntryRepositories
-import com.example.redditclient.redditAPI.TopResponseModel
+import com.example.redditclient.redditAPI.TopEntriesResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
@@ -20,12 +18,9 @@ import io.reactivex.schedulers.Schedulers
 class ViewModel(application: Application) : AndroidViewModel(application) {
 
     var entryRepo: EntryRepositories = EntryRepositories()
-    var entries = MutableLiveData<ArrayList<Entry>>()
+    var entries = MutableLiveData<ArrayList<TopEntriesResponse.Data>>()
     val isLoading = ObservableField(false)
     private val compositeDisposable = CompositeDisposable()
-
-    val NEXT_PAGE = 1
-    val PREV_PAGE = 2
 
     private var firstEntryName: String = ""
     private var lastEntryName: String = ""
@@ -39,21 +34,19 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                 .getTopEntries()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<TopResponseModel.Result>() {
+                .subscribeWith(object : DisposableObserver<TopEntriesResponse.Result>() {
                     override fun onError(e: Throwable) {
                         //todo
 //                        Log.d("Bazinga", "error: $e")
                         isLoading.set(false)
                     }
 
-                    override fun onNext(t: TopResponseModel.Result) {
+                    override fun onNext(t: TopEntriesResponse.Result) {
                         entries.value = getSingleEntry(t.data.children)
                     }
 
                     override fun onComplete() {
                         isLoading.set(false)
-                        Log.d("Bazinga", "firts name = $firstEntryName")
-                        Log.d("Bazinga", "last name = $lastEntryName")
                     }
                 })
         )
@@ -67,14 +60,14 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                 .nextPage(lastEntryName)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<TopResponseModel.Result>() {
+                .subscribeWith(object : DisposableObserver<TopEntriesResponse.Result>() {
                     override fun onError(e: Throwable) {
                         //todo
 //                        Log.d("Bazinga", "error: $e")
                         isLoading.set(false)
                     }
 
-                    override fun onNext(t: TopResponseModel.Result) {
+                    override fun onNext(t: TopEntriesResponse.Result) {
                         entries.value = getSingleEntry(t.data.children)
                     }
 
@@ -90,17 +83,17 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
 
         compositeDisposable.add(
             entryRepo
-                .prevPage(lastEntryName)
+                .prevPage(firstEntryName)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<TopResponseModel.Result>() {
+                .subscribeWith(object : DisposableObserver<TopEntriesResponse.Result>() {
                     override fun onError(e: Throwable) {
                         //todo
 //                        Log.d("Bazinga", "error: $e")
                         isLoading.set(false)
                     }
 
-                    override fun onNext(t: TopResponseModel.Result) {
+                    override fun onNext(t: TopEntriesResponse.Result) {
                         entries.value = getSingleEntry(t.data.children)
                     }
 
@@ -120,18 +113,18 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         customTabsIntent.launchUrl(context, Uri.parse(entries.value?.get(index)?.url))
     }
 
-    private fun getSingleEntry(data: List<TopResponseModel.Children>): ArrayList<Entry> {
-        val entries = ArrayList<Entry>(data.size)
+    private fun getSingleEntry(data: List<TopEntriesResponse.Children>): ArrayList<TopEntriesResponse.Data> {
+        val entries = ArrayList<TopEntriesResponse.Data>(data.size)
         for (i in 0..49) {
             entries.add(
-                Entry(
-                    number = i + 1,
+                TopEntriesResponse.Data(
+                    numOfEntry = i + 1,
                     title = data[i].data.title,
                     author = data[i].data.author,
-                    rating = data[i].data.score,
+                    score = data[i].data.score,
                     subreddit = data[i].data.subreddit,
-                    comments = data[i].data.num_comments,
-                    utcTime = data[i].data.created_utc,
+                    numOfcomments = data[i].data.numOfcomments,
+                    created_utc = data[i].data.created_utc,
                     url = data[i].data.url,
                     thumbnail = data[i].data.thumbnail,
                     name = data[i].data.name

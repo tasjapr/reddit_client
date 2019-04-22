@@ -1,23 +1,22 @@
 package com.example.redditclient.data
 
-import com.example.redditclient.redditAPI.TopResponseModel
+import com.example.redditclient.redditAPI.TopEntriesResponse
 import io.reactivex.Observable
-import java.util.concurrent.TimeUnit
 
 class EntryRepositories {
 
     val localDS = LocalDataSource()
     private val remoteDS = RemoteDataSource()
 
-    fun getTopEntries(): Observable<TopResponseModel.Result> {
+    fun getTopEntries(): Observable<TopEntriesResponse.Result> {
         return remoteDS.getTopEntries()
     }
 
-    fun nextPage(name: String):Observable<TopResponseModel.Result>{
+    fun nextPage(name: String):Observable<TopEntriesResponse.Result>{
         return remoteDS.nextPage(name)
     }
 
-    fun prevPage(name: String):Observable<TopResponseModel.Result>{
+    fun prevPage(name: String):Observable<TopEntriesResponse.Result>{
         return remoteDS.prevPage(name)
     }
 

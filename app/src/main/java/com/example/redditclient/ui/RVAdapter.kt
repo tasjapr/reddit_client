@@ -5,9 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.redditclient.databinding.ItemEntryBinding
+import com.example.redditclient.redditAPI.TopEntriesResponse
 
 class RVAdapter(
-    private var items: ArrayList<Entry>,
+    private var items: ArrayList<TopEntriesResponse.Data>,
     private var listener: OnItemClickListener
 ) : RecyclerView.Adapter<RVAdapter.ViewHolder>() {
 
@@ -25,7 +26,7 @@ class RVAdapter(
         fun onItemClick(position: Int)
     }
 
-    fun replaceData(arrayList: ArrayList<Entry>) {
+    fun replaceData(arrayList: ArrayList<TopEntriesResponse.Data>) {
         items = arrayList
         notifyDataSetChanged()
     }
@@ -33,7 +34,7 @@ class RVAdapter(
     class ViewHolder(private var binding: ItemEntryBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(entry: Entry, listener: OnItemClickListener?) {
+        fun bind(entry: TopEntriesResponse.Data, listener: OnItemClickListener?) {
             binding.entry = entry
             Glide.with(binding.root).load(entry.thumbnail).into(binding.avatar)
             if (listener != null) {

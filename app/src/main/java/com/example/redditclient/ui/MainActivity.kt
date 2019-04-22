@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.redditclient.R
 import com.example.redditclient.databinding.ActivityMainBinding
+import com.example.redditclient.redditAPI.TopEntriesResponse
 
 
 class MainActivity : AppCompatActivity(), RVAdapter.OnItemClickListener, LifecycleOwner {
@@ -34,8 +35,11 @@ class MainActivity : AppCompatActivity(), RVAdapter.OnItemClickListener, Lifecyc
         binding.entriesRv.layoutManager = LinearLayoutManager(this)
         binding.entriesRv.adapter = rvAdapter
 
+        viewModel.entries
+
+
         viewModel.entries.observe(this,
-            Observer<ArrayList<Entry>> { it?.let(rvAdapter::replaceData) })
+            Observer<ArrayList<TopEntriesResponse.Data>> { it?.let(rvAdapter::replaceData) })
 
         viewModel.loadTopEntries()
     }
