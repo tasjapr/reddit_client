@@ -10,7 +10,15 @@ class EntryRepositories {
     private val remoteDS = RemoteDataSource()
 
     fun getTopEntries(): Observable<TopResponseModel.Result> {
-        return remoteDS.getTopEntries().delay(10, TimeUnit.MILLISECONDS)
+        return remoteDS.getTopEntries()
+    }
+
+    fun nextPage(name: String):Observable<TopResponseModel.Result>{
+        return remoteDS.nextPage(name)
+    }
+
+    fun prevPage(name: String):Observable<TopResponseModel.Result>{
+        return remoteDS.prevPage(name)
     }
 
     fun getFavorites(){

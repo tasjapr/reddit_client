@@ -12,4 +12,12 @@ class RemoteDataSource {
         return apiService.getTopEntries()
     }
 
+    fun nextPage(name: String): Observable<TopResponseModel.Result> {
+        return apiService.nextPage(name)
+    }
+
+    fun prevPage(name: String): Observable<TopResponseModel.Result> {
+        return apiService.prevPage(name)
+    }
+
 }

@@ -5,11 +5,18 @@ import io.reactivex.Observable
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface ApiService {
 
     @GET("top.json?limit=50")
     fun getTopEntries(): Observable<TopResponseModel.Result>
+
+    @GET("top.json?limit=50&")
+    fun nextPage(@Query("after") name: String): Observable<TopResponseModel.Result>
+
+    @GET("top.json?limit=50&")
+    fun prevPage(@Query("before") name: String): Observable<TopResponseModel.Result>
 
     companion object {
         fun create(): ApiService {

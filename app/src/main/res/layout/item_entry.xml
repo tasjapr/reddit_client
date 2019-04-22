@@ -48,7 +48,6 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:contentDescription="@string/description_avatar"
-                android:src="#FC1EB2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
