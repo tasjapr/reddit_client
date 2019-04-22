@@ -1,11 +1,13 @@
 package com.example.redditclient.data
 
+import android.content.Context
 import com.example.redditclient.redditAPI.TopEntriesResponse
 import io.reactivex.Observable
 
 class EntryRepositories {
 
-    val localDS = LocalDataSource()
+    private val localDS = LocalDataSource()
+
     private val remoteDS = RemoteDataSource()
 
     fun getTopEntries(): Observable<TopEntriesResponse.Result> {
@@ -20,8 +22,8 @@ class EntryRepositories {
         return remoteDS.prevPage(name)
     }
 
-    fun getFavorites(){
-        //todo
+    fun getFavorites(context: Context){
+        localDS
     }
 }
 
