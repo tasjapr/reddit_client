@@ -11,15 +11,17 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.redditclient.NetworkManager
 import com.example.redditclient.R
 import com.example.redditclient.databinding.ActivityMainBinding
-import com.example.redditclient.redditAPI.TopEntriesResponse
+import com.example.redditclient.redditAPI.EntriesResponse
+import kotlinx.android.synthetic.main.item_entry.*
 
 
 class MainActivity : AppCompatActivity(), RVAdapter.OnItemClickListener, LifecycleOwner {
 
     lateinit var binding: ActivityMainBinding
-    var mainMenu: Menu? = null
+    var actionMenu: Menu? = null
 
     private val rvAdapter = RVAdapter(arrayListOf(), this)
     private lateinit var viewModel: ViewModel
@@ -35,11 +37,8 @@ class MainActivity : AppCompatActivity(), RVAdapter.OnItemClickListener, Lifecyc
         binding.entriesRv.layoutManager = LinearLayoutManager(this)
         binding.entriesRv.adapter = rvAdapter
 
-        viewModel.entries
-
-
         viewModel.entries.observe(this,
-            Observer<ArrayList<TopEntriesResponse.Data>> { it?.let(rvAdapter::replaceData) })
+            Observer<ArrayList<EntriesResponse.Data>> { it?.let(rvAdapter::replaceData) })
 
         viewModel.loadTopEntries()
     }
@@ -51,27 +50,29 @@ class MainActivity : AppCompatActivity(), RVAdapter.OnItemClickListener, Lifecyc
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.main_menu, menu)
-        mainMenu?.get(1)?.isEnabled = false
+        actionMenu = menu
         return true
     }
+
+    var pageNumber = 1
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_refresh -> viewModel.loadTopEntries()
 
-            R.id.action_favorites -> Log.d("Bazinga", "action_favorites")
-            //todo
             R.id.action_next_page -> {
-                mainMenu?.get(1)?.isEnabled = true
+                pageNumber += 1
                 viewModel.loadNextPage()
             }
 
             R.id.action_prev_page -> {
                 viewModel.loadPrevPage()
-
+                pageNumber -= 1
             }
         }
+        actionMenu!![0].isVisible = pageNumber >= 2
 
+        Log.d("Bazinga", "page number = $pageNumber")
 
         return true
     }

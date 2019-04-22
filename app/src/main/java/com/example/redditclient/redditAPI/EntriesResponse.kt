@@ -5,7 +5,7 @@ import org.ocpsoft.prettytime.PrettyTime
 import java.util.*
 
 
-object TopEntriesResponse {
+object EntriesResponse {
 
     data class Result(val data: MainData)
 
@@ -15,7 +15,7 @@ object TopEntriesResponse {
 
     data class Data(
         val numOfEntry: Int, val subreddit: String, val author: String, val created_utc: Long, val title: String,
-        val numOfcomments: Int, val score: Int, val url: String, val thumbnail: String, var name: String
+        val num_comments: Int, val score: Int, val url: String, val thumbnail: String, var name: String
     ) : BaseObservable() {
         private var timeAgo = PrettyTime(Locale.ENGLISH).format(Date(created_utc * 1000))
         var info: String = "post by $author in $subreddit $timeAgo"

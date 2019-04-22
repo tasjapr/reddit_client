@@ -4,12 +4,14 @@ import android.app.Application
 import android.content.Context
 import android.graphics.Color
 import android.net.Uri
+import android.widget.Toast
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.example.redditclient.NetworkManager
 import com.example.redditclient.data.EntryRepositories
-import com.example.redditclient.redditAPI.TopEntriesResponse
+import com.example.redditclient.redditAPI.EntriesResponse
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
@@ -18,9 +20,11 @@ import io.reactivex.schedulers.Schedulers
 class ViewModel(application: Application) : AndroidViewModel(application) {
 
     var entryRepo: EntryRepositories = EntryRepositories()
-    var entries = MutableLiveData<ArrayList<TopEntriesResponse.Data>>()
+    var entries = MutableLiveData<ArrayList<EntriesResponse.Data>>()
     val isLoading = ObservableField(false)
+    private val context = application.applicationContext
     private val compositeDisposable = CompositeDisposable()
+    private val networkManager = NetworkManager(context)
 
     private var firstEntryName: String = ""
     private var lastEntryName: String = ""
@@ -29,27 +33,29 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     fun loadTopEntries() {
         isLoading.set(true)
 
-        compositeDisposable.add(
-            entryRepo
-                .getTopEntries()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<TopEntriesResponse.Result>() {
-                    override fun onError(e: Throwable) {
-                        //todo
-//                        Log.d("Bazinga", "error: $e")
-                        isLoading.set(false)
-                    }
+        if (networkManager.isConnectedToInternet) {
+            compositeDisposable.add(
+                entryRepo
+                    .getTopEntries()
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(object : DisposableObserver<EntriesResponse.Result>() {
+                        override fun onError(e: Throwable) {
+                            Toast.makeText(context, "Check your internet connection and try again", Toast.LENGTH_LONG)
+                                .show()
+                            isLoading.set(false)
+                        }
 
-                    override fun onNext(t: TopEntriesResponse.Result) {
-                        entries.value = getSingleEntry(t.data.children)
-                    }
+                        override fun onNext(t: EntriesResponse.Result) {
+                            entries.value = getSingleEntry(t.data.children)
+                        }
 
-                    override fun onComplete() {
-                        isLoading.set(false)
-                    }
-                })
-        )
+                        override fun onComplete() {
+                            isLoading.set(false)
+                        }
+                    })
+            )
+        }
     }
 
     fun loadNextPage() {
@@ -60,14 +66,14 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                 .nextPage(lastEntryName)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<TopEntriesResponse.Result>() {
+                .subscribeWith(object : DisposableObserver<EntriesResponse.Result>() {
                     override fun onError(e: Throwable) {
-                        //todo
-//                        Log.d("Bazinga", "error: $e")
+                        Toast.makeText(context, "Check your internet connection and try again", Toast.LENGTH_LONG)
+                            .show()
                         isLoading.set(false)
                     }
 
-                    override fun onNext(t: TopEntriesResponse.Result) {
+                    override fun onNext(t: EntriesResponse.Result) {
                         entries.value = getSingleEntry(t.data.children)
                     }
 
@@ -86,14 +92,14 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
                 .prevPage(firstEntryName)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<TopEntriesResponse.Result>() {
+                .subscribeWith(object : DisposableObserver<EntriesResponse.Result>() {
                     override fun onError(e: Throwable) {
-                        //todo
-//                        Log.d("Bazinga", "error: $e")
+                        Toast.makeText(context, "Check your internet connection and try again", Toast.LENGTH_LONG)
+                            .show()
                         isLoading.set(false)
                     }
 
-                    override fun onNext(t: TopEntriesResponse.Result) {
+                    override fun onNext(t: EntriesResponse.Result) {
                         entries.value = getSingleEntry(t.data.children)
                     }
 
@@ -113,17 +119,17 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
         customTabsIntent.launchUrl(context, Uri.parse(entries.value?.get(index)?.url))
     }
 
-    private fun getSingleEntry(data: List<TopEntriesResponse.Children>): ArrayList<TopEntriesResponse.Data> {
-        val entries = ArrayList<TopEntriesResponse.Data>(data.size)
+    private fun getSingleEntry(data: List<EntriesResponse.Children>): ArrayList<EntriesResponse.Data> {
+        val entries = ArrayList<EntriesResponse.Data>(data.size)
         for (i in 0..49) {
             entries.add(
-                TopEntriesResponse.Data(
+                EntriesResponse.Data(
                     numOfEntry = i + 1,
                     title = data[i].data.title,
                     author = data[i].data.author,
                     score = data[i].data.score,
                     subreddit = data[i].data.subreddit,
-                    numOfcomments = data[i].data.numOfcomments,
+                    num_comments = data[i].data.num_comments,
                     created_utc = data[i].data.created_utc,
                     url = data[i].data.url,
                     thumbnail = data[i].data.thumbnail,

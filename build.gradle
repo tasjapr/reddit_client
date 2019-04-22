@@ -7,7 +7,6 @@ buildscript {
         nav_version = '2.1.0-alpha02'
         roomVersion = '1.1.1'
         archLifecycleVersion = '1.1.1'
-        coroutines = '1.2.0'
     }
 
     repositories {
