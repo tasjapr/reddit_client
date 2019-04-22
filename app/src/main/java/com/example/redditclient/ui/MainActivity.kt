@@ -1,7 +1,6 @@
 package com.example.redditclient.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -11,12 +10,9 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.redditclient.NetworkManager
 import com.example.redditclient.R
 import com.example.redditclient.databinding.ActivityMainBinding
 import com.example.redditclient.redditAPI.EntriesResponse
-import kotlinx.android.synthetic.main.item_entry.*
-
 
 class MainActivity : AppCompatActivity(), RVAdapter.OnItemClickListener, LifecycleOwner {
 
@@ -55,7 +51,6 @@ class MainActivity : AppCompatActivity(), RVAdapter.OnItemClickListener, Lifecyc
     }
 
     var pageNumber = 1
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_refresh -> viewModel.loadTopEntries()
@@ -71,8 +66,6 @@ class MainActivity : AppCompatActivity(), RVAdapter.OnItemClickListener, Lifecyc
             }
         }
         actionMenu!![0].isVisible = pageNumber >= 2
-
-        Log.d("Bazinga", "page number = $pageNumber")
 
         return true
     }

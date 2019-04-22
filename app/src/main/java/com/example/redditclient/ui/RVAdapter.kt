@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.redditclient.R
 import com.example.redditclient.databinding.ItemEntryBinding
 import com.example.redditclient.redditAPI.EntriesResponse
 
@@ -36,7 +37,14 @@ class RVAdapter(
 
         fun bind(entry: EntriesResponse.Data, listener: OnItemClickListener?) {
             binding.entry = entry
-            Glide.with(binding.root).load(entry.thumbnail).into(binding.avatar)
+
+            if (entry.thumbnail == "self" || entry.thumbnail == "default") {
+                Glide.with(binding.root).load(R.drawable.ic_news)
+            } else {
+                Glide.with(binding.root).load(entry.thumbnail).into(binding.avatar)
+            }
+
+
             if (listener != null) {
                 binding.root.setOnClickListener { listener.onItemClick(layoutPosition) }
             }
